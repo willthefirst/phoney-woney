@@ -1,3 +1,78 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    /**
+  * default
+  */
+    "no-underscore-dangle": "off",
+    "no-console": "off",
+    "no-restricted-syntax": "off",
+    "prefer-destructuring": "off",
+    "no-constant-condition": "off",
+    "no-void": "off",
+    "no-param-reassign": "off",
+    // Turning this off since we're using @typescript-eslint/no-use-before-define
+    "no-use-before-define": "off",
+    "no-multiple-empty-lines": [
+      2,
+      {
+        "max": 1
+      }
+    ],
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-tabs": 0,
+    "no-multi-spaces": "error",
+    "array-bracket-spacing": [
+      "error",
+      "never"
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "space-in-parens": [
+      "error",
+      "never"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "curly": "error",
+    "space-before-blocks": "error",
+    "keyword-spacing": "error",
+    "brace-style": "error",
+    "block-spacing": "error",
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": {
+          "multiline": true
+        },
+        "ObjectPattern": {
+          "multiline": true
+        },
+        "ImportDeclaration": "never",
+        "ExportDeclaration": {
+          "multiline": true
+        }
+      }
+    ],
+    "object-property-newline": [
+      "error",
+      {
+        "allowAllPropertiesOnSameLine": true
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      "only-multiline"
+    ]
+  }
 }
