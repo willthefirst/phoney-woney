@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { isJSDocUnknownTag } from 'typescript'
 import NotSupportedMessage from './NotSupportedMessage'
 
 // Necessary since Typescript doesn't support `Accelerometer` as of 12/3/22.
