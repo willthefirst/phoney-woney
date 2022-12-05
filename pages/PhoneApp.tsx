@@ -1,40 +1,54 @@
-import React, { useEffect, useState } from 'react'
-import NotSupportedMessage from './NotSupportedMessage'
-
-// Necessary since Typescript doesn't support `Accelerometer` as of 12/3/22.
-declare var Accelerometer: any
+import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {}
 
 function PhoneApp({ }: Props) {
-    const [notSupported, setNotSupported] = useState(false)
-    const [data, setData] = useState({})
+    const $canvasRef = useRef<HTMLCanvasElement>(null)
+    const $videoRef = useRef<HTMLVideoElement>(null)
 
     useEffect(() => {
-        if (!(('Accelerometer' in window))) {
-            setNotSupported(true)
+        function handleSuccess(stream: MediaStream) {
+            if (!$videoRef.current) {
+                return
+            }
+
+            $videoRef.current.srcObject = stream
+        }
+
+        function handleError(error: Error) {
+            console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name)
+        }
+
+        async function initializeCamera() {
+            const constraints = { video: true }
+
+            try {
+                const mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+                handleSuccess(mediaStream)
+            } catch (error: unknown) {
+                handleError(error as Error)
+            }
+        }
+
+        initializeCamera()
+    }, [])
+
+    function handleClick() {
+        if (!$canvasRef.current || !$videoRef.current) {
             return
         }
 
-        const acl = new Accelerometer({ frequency: 60 })
+        $canvasRef.current.width = $videoRef.current.videoWidth
+        $canvasRef.current.height = $videoRef.current.videoHeight
 
-        acl.addEventListener("reading", () => {
-            setData(acl)
-            console.log(`Acceleration along the X-axis ${acl.x}`)
-            console.log(`Acceleration along the Y-axis ${acl.y}`)
-            console.log(`Acceleration along the Z-axis ${acl.z}`)
-        })
-
-        acl.start()
-
-    }, [])
+        $canvasRef.current.getContext('2d')?.drawImage($videoRef.current, 0, 0, $canvasRef.current.width, $canvasRef.current.height)
+    };
 
     return (
         <div>
-            {notSupported ?
-                <NotSupportedMessage /> :
-                <pre>{JSON.stringify(data, undefined, 2)}</pre>
-            }
+            <button onClick={handleClick}>Click me</button>
+            <canvas ref={$canvasRef} width={800} height={450}></canvas>
+            <video ref={$videoRef} width={800} height={450} autoPlay playsInline></video>
         </div>
     )
 }
