@@ -1,5 +1,5 @@
 import styles from '../styles/Home.module.css'
-import PhoneApp from './PhoneApp'
+import PhoneApp from './components/PhoneApp/PhoneApp'
 
 export default function Home() {
     return (

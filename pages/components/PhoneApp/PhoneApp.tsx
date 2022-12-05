@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import styles from "./PhoneApp.module.css"
+import { useEffect, useRef } from 'react'
 
 type Props = {}
 
-function PhoneApp({ }: Props) {
+export function PhoneApp({ }: Props) {
     const $canvasRef = useRef<HTMLCanvasElement>(null)
     const $videoRef = useRef<HTMLVideoElement>(null)
 
@@ -33,7 +34,7 @@ function PhoneApp({ }: Props) {
         initializeCamera()
     }, [])
 
-    function handleClick() {
+    function printFrameToCanvas() {
         if (!$canvasRef.current || !$videoRef.current) {
             return
         }
@@ -44,11 +45,19 @@ function PhoneApp({ }: Props) {
         $canvasRef.current.getContext('2d')?.drawImage($videoRef.current, 0, 0, $canvasRef.current.width, $canvasRef.current.height)
     };
 
+    useEffect(() => {
+        const PRINT_INTERVAL = 100
+        const interval = setInterval(printFrameToCanvas, PRINT_INTERVAL)
+
+        return () => {
+            clearInterval(interval)
+        }
+    })
+
     return (
         <div>
-            <button onClick={handleClick}>Click me</button>
             <canvas ref={$canvasRef} width={800} height={450}></canvas>
-            <video ref={$videoRef} width={800} height={450} autoPlay playsInline></video>
+            <video ref={$videoRef} width={800} height={450} autoPlay playsInline className={styles.video}></video>
         </div>
     )
 }
